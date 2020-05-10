@@ -1,18 +1,68 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1 class="home__title">Продукты</h1>
+    <search
+      placeholder="Поиск товара"
+      :value="search"
+      @search="search = $event"
+    />
+    <div class="wrapp__catalog">
+      <catalog-item
+        v-for="(product, index) in filterCatalog"
+        :key="index"
+        :product_data="product"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import catalogItem from '../components/CatalogItem'
+import search from '../components/Search'
 
 export default {
-  name: 'Home',
   components: {
-    HelloWorld
+    catalogItem,
+    search
+  },
+  data () {
+    return {
+      search: ''
+    }
+  },
+  methods: {
+
+  },
+  computed: {
+    products () {
+      return this.$store.getters.PRODUCTS
+    },
+    filterCatalog () {
+      if (this.search === '') {
+        return this.products
+      }
+      return this.products.filter(product => {
+        if (product.name.toLowerCase().match(this.search.toLowerCase())) {
+          return product
+        }
+      })
+    }
   }
 }
 </script>
+
+<style scoped>
+  .wrapp__catalog {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .home__title {
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: center;
+    margin-top: 25px;
+    font-size: 60px;
+  }
+</style>

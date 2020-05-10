@@ -1,4 +1,4 @@
-# CartApp
+# cart-app
 
 ## Project setup
 ```
